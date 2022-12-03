@@ -29,12 +29,12 @@ public class Scene {
                 closestIntersection = intersection;
             }
         }
-        /*for (Plane plane : planes) {
+        for (Plane plane : planes) {
             Intersection intersection = plane.intersect(ray);
             if (intersection != null && (closestIntersection == null || intersection.t < closestIntersection.t)) {
                 closestIntersection = intersection;
             }
-        }*/
+        }
         return closestIntersection;
     }
 }

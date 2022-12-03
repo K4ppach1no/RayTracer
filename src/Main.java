@@ -12,23 +12,26 @@ public class Main {
 
         long startTime = System.currentTimeMillis();
 
-        int width = 1280;
-        int height = 720;
+        int width = 1080;
+        int height = 1080;
 
         // Create a sphere
-        Sphere sphere1 = new Sphere(new Vec3(0, 0, -1), 0.5f, new Color(0, 1, 0), 0.5f, 0.5f);
+        Sphere sphere1 = new Sphere(new Vec3(0.8f, 1, -5), 1f, new Color(0, 1, 0), 1f, 0.5f);
+
+        // Create a sphere
+        Sphere sphere2 = new Sphere(new Vec3(0, 0, -3), 0.5f, new Color(0, 0, 1), 1f, 1f);
 
         // Create a light
         Light light1 = new Light(new Vec3(0, 0, 0), new Color(1,1,1), 1.0f);
 
-        // create a plane
-        //Plane plane1 = new Plane(new Vec3(0, -1, 0), 1, new Color(1, 1, 1), 0.5f);
+        // Create a plane
+        //Plane plane1 = new Plane(new Vec3(0, -1, 0), 10, new Color(1, 1, 1), 0.5f);
 
         // Create a camera
         Camera camera = new Camera(new Vec3(0, 0, 0), new Vec3(0, 0, -1), 60);
 
         // add the sphere to the scene
-        Scene scene = new Scene(camera, new Sphere[]{sphere1}, new Light[]{light1}, new Plane[]{/*plane1*/});
+        Scene scene = new Scene(camera, new Sphere[]{sphere1,sphere2}, new Light[]{light1}, new Plane[]{/*plane1*/});
 
 
         File image = new File("image.png");

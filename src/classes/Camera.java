@@ -12,9 +12,12 @@ public class Camera {
         this.direction = direction;
         this.fov = fov;
         Center = position.add(direction);
-        TopLeft = Center.add(direction.cross(new Vec3(0, 1, 0)).scale(fov / 2)).add(direction.cross(new Vec3(0, 0, 1)).scale(fov / 2));
-        TopRight = Center.add(direction.cross(new Vec3(0, 1, 0)).scale(fov / 2)).sub(direction.cross(new Vec3(0, 0, 1)).scale(fov / 2));
-        BottomLeft = Center.sub(direction.cross(new Vec3(0, 1, 0)).scale(fov / 2)).add(direction.cross(new Vec3(0, 0, 1)).scale(fov / 2));
+        float scale = (float) Math.tan(Math.toRadians(fov / 2));
+        Vec3 right = direction.cross(new Vec3(0, 1, 0)).normalize().scale(scale);
+        Vec3 up = right.cross(direction).normalize().scale(scale);
+        TopLeft = Center.add(up).sub(right);
+        TopRight = Center.add(up).add(right);
+        BottomLeft = Center.sub(up).sub(right);
     }
 
     public Ray getRay(float u, float v) {
