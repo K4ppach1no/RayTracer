@@ -3,7 +3,9 @@ package classes;
 import java.awt.image.BufferedImage;
 
 public class Renderer {
-    public static final int MAX_RECURSION_DEPTH = 5;
+    public static final int MAX_RECURSION_DEPTH = 10;
+
+    // EPSILON is used to prevent self-intersection, also known as acne
     public static final float EPSILON = 0.0001f;
 
     public static Color trace(Ray ray, Scene scene, int recursionDepth) {
@@ -29,6 +31,7 @@ public class Renderer {
                 continue;
             }
 
+            // specular shading
             float diffuse = Math.max(0, lightDirection.dot(intersection.normal));
             color = color.add(intersection.material.color.mul(light.color).mul(diffuse));
         }

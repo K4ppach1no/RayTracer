@@ -18,7 +18,7 @@ public class Scene {
         this.spheres = spheres;
         this.lights = lights;
         this.planes = planes;
-        this.backgroundColor = new Color(0, 0, 0);
+        this.backgroundColor = new Color(0.5f, 0.5f, 0.5f);
     }
 
     public Intersection getIntersection(Ray ray) {
