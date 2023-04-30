@@ -11,5 +11,9 @@ public class Ray {
         this.t = t;
     }
 
+    public Vec3 pointAt(float t) {
+        return origin.add(direction.scale(t));
+    }
+
 
 }

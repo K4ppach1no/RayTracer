@@ -2,10 +2,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 
 import classes.*;
-import shapes.Plane;
-import shapes.Sphere;
+import shapes.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,27 +15,40 @@ public class Main {
         int width = 4096;
         int height = 4096;
 
-        // Create a sphere
-        Sphere sphere1 = new Sphere(new Vec3(0.5f, 0, -3), 0.5f, new Color(0, 1, 0), 0.5f, 0.5f);
+        // list of materials
+        Vector<Material> materials = new Vector<Material>();
 
         // Create a sphere
-        Sphere sphere2 = new Sphere(new Vec3(-0.5f, 0, -2), 0.5f, new Color(0, 0, 1), 0.5f, 0.5f);
+        Sphere sphere1 = new Sphere(
+                new Vec3(-0.6f, 0, -2), // position
+                0.5f, // radius
+                new Color(255, 0, 0), // color
+                0.5f, // reflectivity
+                0f // transparency
+        );
+        materials.add(sphere1);
+
+        // Create a sphere
+        Sphere sphere2 = new Sphere(
+                new Vec3(0.5f, 0, -2), // position
+                0.5f, // radius
+                new Color(0, 0, 255), // color
+                0.5f, // reflectivity
+                0.0f // transparency
+        );
+        materials.add(sphere2);
 
         // Create a light
-        Light light1 = new Light(new Vec3(0, 2, 0), new Color(1,1,1), 1.0f, new Vec3(0, 0, 0));
-
-        // Create a light
-        Light light2 = new Light(new Vec3(0f, 1, 0), new Color(1,1,1), 1.0f, new Vec3(0, 0, 0));
-
-        // Create a plane
-        //Plane plane1 = new Plane(new Vec3(0, -1, 0), 10, new Color(1, 1, 1), 0.5f);
+        Light light1 = new Light(new Vec3(0, 0, 0), new Color(1, 1, 1), 1.0f, new Vec3(0, 0, 0));
 
         // Create a camera
         Camera camera = new Camera(new Vec3(0, 0, 0), new Vec3(0, 0, -1), 60);
 
         // add the sphere to the scene
-        Scene scene = new Scene(camera, new Sphere[]{sphere1,sphere2}, new Light[]{light1,light2}, new Plane[]{/*plane1*/});
-
+        Scene scene = new Scene(
+                camera,
+                new Light[] { light1 },
+                materials.toArray(new Material[0]));
 
         File image = new File("image.png");
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);

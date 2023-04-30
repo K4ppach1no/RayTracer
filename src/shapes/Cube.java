@@ -2,17 +2,17 @@ package shapes;
 
 import classes.*;
 
-public class Sphere extends Material {
-    Vec3 center;
-    float radius;
+public class Cube extends Material {
+    Vec3 position;
+    float size;
     Color color;
     float reflectivity;
     float transparency;
 
-    public Sphere(Vec3 center, float radius, Color color, float reflectivity, float transparency) {
+    public Cube(Vec3 position, float size, Color color, float reflectivity, float transparency) {
         super(color, reflectivity, transparency);
-        this.center = center;
-        this.radius = radius;
+        this.position = position;
+        this.size = size;
         this.color = color;
         this.reflectivity = reflectivity;
         this.transparency = transparency;
@@ -20,14 +20,14 @@ public class Sphere extends Material {
 
     @Override
     public Intersection intersect(Ray ray) {
-        float t = Vec3.dot(center.sub(ray.origin), ray.direction);
+        float t = Vec3.dot(position.sub(ray.origin), ray.direction);
         Vec3 q = ray.origin.add(ray.direction.mul(t));
 
-        float y = center.sub(q).length();
-        if (y > radius) {
+        float y = position.sub(q).length();
+        if (y > size) {
             return null;
         }
-        float x = (float) Math.sqrt(radius * radius - y * y);
+        float x = (float) Math.sqrt(size * size - y * y);
         // t0 is the distance from the camera to the first intersection
         float t0 = t - x;
         float t1 = t + x;
@@ -43,7 +43,7 @@ public class Sphere extends Material {
             }
         }
         Vec3 position = ray.origin.add(ray.direction.mul(t0));
-        Vec3 normal = position.sub(center).normalize();
+        Vec3 normal = position.sub(position).normalize();
         return new Intersection(position, normal, this, t0);
     }
 }

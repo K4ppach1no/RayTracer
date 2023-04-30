@@ -1,9 +1,9 @@
 package classes;
 
 public class Color {
-    public float r, g, b;
+    public int r, g, b;
 
-    public Color(float r, float g, float b) {
+    public Color (int r, int g, int b) {
         this.r = r;
         this.g = g;
         this.b = b;
@@ -18,13 +18,18 @@ public class Color {
     }
 
     public Color mul(float reflectivity) {
-        return new Color(r * reflectivity, g * reflectivity, b * reflectivity);
+        return new Color((int) (r * reflectivity), (int) (g * reflectivity), (int) (b * reflectivity));
+    }
+
+    public Color scale(float scale) {
+        return new Color((int) (r * scale), (int) (g * scale), (int) (b * scale));
+    }
+
+    public Color scale (Color color) {
+        return new Color((int) (r * color.r / 255f), (int) (g * color.g / 255f), (int) (b * color.b / 255f));
     }
 
     public int toInt() {
-        int r = (int) (255.99 * this.r);
-        int g = (int) (255.99 * this.g);
-        int b = (int) (255.99 * this.b);
         return (r << 16) | (g << 8) | b;
     }
 }
