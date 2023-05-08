@@ -1,7 +1,5 @@
 package classes;
 
-import shapes.*;
-
 public class Scene {
     // The scene class is a container for all the objects in the scene.
     // It also contains the camera and the lights.
@@ -19,39 +17,27 @@ public class Scene {
     }
 
     public Intersection getIntersection(Ray ray) {
+        // This method returns the closest intersection between a ray and an object in the scene.
+        // If there is no intersection, it returns null.
+
+        // Initialize closestIntersection to null
         Intersection closestIntersection = null;
-        for (Material material : materials) {
-            // check if the object is a sphere
-            if (material instanceof Sphere) {
-                Sphere sphere = (Sphere) material;
-                Intersection intersection = sphere.intersect(ray);
-                if (intersection != null) {
-                    if (closestIntersection == null || intersection.t < closestIntersection.t) {
-                        closestIntersection = intersection;
-                    }
-                }
-            }
-            // check if the object is a plane
-            if (material instanceof Plane) {
-                Plane plane = (Plane) material;
-                Intersection intersection = plane.intersect(ray);
-                if (intersection != null) {
-                    if (closestIntersection == null || intersection.t < closestIntersection.t) {
-                        closestIntersection = intersection;
-                    }
-                }
-            }
-            // check if the object is a Cube
-            if (material instanceof Cube) {
-                Cube cube = (Cube) material;
-                Intersection intersection = cube.intersect(ray);
-                if (intersection != null) {
-                    if (closestIntersection == null || intersection.t < closestIntersection.t) {
-                        closestIntersection = intersection;
-                    }
+
+        // For each object in the scene
+        for (var material : materials) {
+            // Get the intersection
+            Intersection intersection = material.intersect(ray);
+
+            // If there is an intersection
+            if (intersection != null) {
+                // If closestIntersection is null or the intersection is closer than closestIntersection
+                if (closestIntersection == null || intersection.t < closestIntersection.t) {
+                    // Set closestIntersection to intersection
+                    closestIntersection = intersection;
                 }
             }
         }
+
         return closestIntersection;
     }
 }

@@ -20,30 +20,19 @@ public class Sphere extends Material {
 
     @Override
     public Intersection intersect(Ray ray) {
-        float t = Vec3.dot(center.sub(ray.origin), ray.direction);
-        Vec3 q = ray.origin.add(ray.direction.mul(t));
-
-        float y = center.sub(q).length();
-        if (y > radius) {
+        Vec3 op = center.sub(ray.origin);
+        float t = op.dot(ray.direction);
+        Vec3 q = op.sub(ray.direction.scale(t));
+        float p2 = q.dot(q);
+        if (p2 > radius * radius) {
             return null;
         }
-        float x = (float) Math.sqrt(radius * radius - y * y);
-        // t0 is the distance from the camera to the first intersection
-        float t0 = t - x;
-        float t1 = t + x;
-        if (t0 > t1) {
-            float temp = t0;
-            t0 = t1;
-            t1 = temp;
-        }
-        if (t0 < 0) {
-            t0 = t1;
-            if (t0 < 0) {
-                return null;
-            }
-        }
-        Vec3 position = ray.origin.add(ray.direction.mul(t0));
-        Vec3 normal = position.sub(center).normalize();
-        return new Intersection(position, normal, this, t0);
+        t -= (float) Math.sqrt(radius * radius - p2);
+        if ( t < ray.t && t > 0) {
+            Vec3 position = ray.pointAt(t);
+            Vec3 normal = position.sub(center).normalize();
+            return new Intersection(position, normal, this, t);
+        } 
+        return null;
     }
 }

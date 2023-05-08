@@ -20,9 +20,11 @@ public class Plane extends Material {
 
     @Override
     public Intersection intersect(Ray ray) {
-        float t = -(ray.origin.y-distance) / ray.direction.y;
-        if (t < 0) {return null;}
-        Vec3 position = ray.origin.add(ray.direction.scale(t));
-        return new Intersection(position, normal, this, t);
+        float t = -(ray.origin.dot(normal) + distance) / ray.direction.dot(normal);
+        if (t < ray.t && t > 0) {
+            Vec3 position = ray.pointAt(t);
+            return new Intersection(position, normal, this, t);
+        }
+        return null;
     }
 }

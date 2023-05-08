@@ -22,6 +22,6 @@ public class Camera {
 
     public Ray getRay(float u, float v) {
         Vec3 direction = TopLeft.add(TopRight.sub(TopLeft).mul(u)).add(BottomLeft.sub(TopLeft).mul(v)).sub(position);
-        return new Ray(position, direction, 0);
+        return new Ray(position, direction, Float.MAX_VALUE);
     }
 }
