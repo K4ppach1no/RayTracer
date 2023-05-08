@@ -53,13 +53,6 @@ public class Renderer {
                 intensity = 0;
                 break;
             }
-
-            // specular
-            Vec3 half = lightDir.add(ray.direction).normalize();
-            float specular = (float) Math.pow(Math.max(0, normal.dot(half)), 1000);
-            intensity += specular * light.intensity / distance2;
-
-
         }
 
         // calculate reflection
@@ -74,6 +67,12 @@ public class Renderer {
         // add the reflection color to the color
         color = color.add(reflectionColor.mul(intersection.material.getReflectivity()));
 
+        // calculate the refraction color
+        Color refractionColor = trace(new Ray(intersection.position.add(reflection.scale(EPSILON)), reflection, Float.MAX_VALUE), scene, recursionDepth - 1);
+
+        // add the refraction color to the color
+        color = color.add(refractionColor.mul(intersection.material.getTransparency()));
+
         // return the color
         return color;
     }
@@ -87,7 +86,7 @@ public class Renderer {
                 float u = (float) x / width;
                 float v = (float) y / height;
                 Ray ray = scene.camera.getRay(u, v);
-                Color color = trace(ray, scene, 2);
+                Color color = trace(ray, scene, 5);
                 img.setRGB(x, y, color.toInt());
             }
         }

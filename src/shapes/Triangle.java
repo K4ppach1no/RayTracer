@@ -1,10 +1,10 @@
 package shapes;
 
-
-
 import classes.*;
 
 public class Triangle extends Material {
+
+    public static final float EPSILON = 0.0001f;
     Vec3 v1;
     Vec3 v2;
     Vec3 v3;
@@ -32,40 +32,40 @@ public class Triangle extends Material {
     public Intersection intersect(Ray ray) {
         // Find the normal of the triangle
         Vec3 edge1 = v2.sub(v1);
-        Vec3 edge2 = v3.subtract(v1);
-        Vec3 normal = edge1.crossProduct(edge2).normalize();
-    
+        Vec3 edge2 = v3.sub(v1);
+        Vec3 normal = edge1.cross(edge2).normalize();
+
         // Check if the ray and triangle are parallel
-        float denominator = normal.dotProduct(ray.getDirection());
+        float denominator = normal.dot(ray.direction);
         if (Math.abs(denominator) < EPSILON) {
             return null;
         }
-    
+
         // Find the point of intersection between the ray and the plane of the triangle
-        Vector3D toTriangle = v1.subtract(ray.getOrigin());
-        float t = toTriangle.dotProduct(normal) / denominator;
+        Vec3 toTriangle = v1.sub(ray.origin);
+        float t = toTriangle.dot(normal) / denominator;
         if (t < EPSILON) {
             return null;
         }
-    
-        Vector3D intersectionPoint = ray.pointAt(t);
-    
+
+        Vec3 intersectionPoint = ray.origin.add(ray.direction.scale(t));
+
         // Check if the intersection point is inside the triangle
-        Vector3D edge1Cross = edge1.crossProduct(intersectionPoint.subtract(v1));
-        if (normal.dotProduct(edge1Cross) < EPSILON) {
+        Vec3 edge1Cross = v1.sub(v3).cross(intersectionPoint.sub(v3));
+        if (normal.dot(edge1Cross) < EPSILON) {
             return null;
         }
-    
-        Vector3D edge2Cross = edge2.crossProduct(intersectionPoint.subtract(v3));
-        if (normal.dotProduct(edge2Cross) < EPSILON) {
+
+        Vec3 edge2Cross = edge2.cross(intersectionPoint.sub(v3));
+        if (normal.dot(edge2Cross) < EPSILON) {
             return null;
         }
-    
-        Vector3D edge3Cross = v1.subtract(v2).crossProduct(intersectionPoint.subtract(v2));
-        if (normal.dotProduct(edge3Cross) < EPSILON) {
+
+        Vec3 edge3Cross = v1.sub(v2).cross(intersectionPoint.sub(v2));
+        if (normal.dot(edge3Cross) < EPSILON) {
             return null;
         }
-    
+
         // Return the intersection data
         return new Intersection(intersectionPoint, normal, this, t);
     }
