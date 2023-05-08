@@ -48,16 +48,6 @@ public class Main {
         );
         materials.add(sphere3);
 
-        // Create a plane
-        Plane plane1 = new Plane(
-                new Vec3(0, 1, 0), // normal
-                -1, // distance
-                new Color(255, 255, 255), // color
-                0.0f, // reflectivity
-                0.0f // transparency
-        );
-        //materials.add(plane1);
-
         // Create a light
         Light light1 = new Light(new Vec3(1, 0, 0), new Color(1, 1, 1), 2.0f, new Vec3(0, 0, 0));
 

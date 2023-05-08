@@ -26,6 +26,7 @@ public class Material {
         return transparency;
     }
 
+    // intersect a ray with the object (this is an abstract method that is implemented by the subclasses)
     public Intersection intersect(Ray ray) {
         return null;
     }

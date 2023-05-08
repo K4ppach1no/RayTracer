@@ -37,6 +37,7 @@ public class Renderer {
             if (angle < 0) {
                 continue;
             }
+            // calculate intensity
             Vec3 distance = light.position.sub(intersection.position);
             float distance2 = distance.dot(distance);
             intensity += angle * light.intensity / distance2;
@@ -52,6 +53,13 @@ public class Renderer {
                 intensity = 0;
                 break;
             }
+
+            // specular
+            Vec3 half = lightDir.add(ray.direction).normalize();
+            float specular = (float) Math.pow(Math.max(0, normal.dot(half)), 1000);
+            intensity += specular * light.intensity / distance2;
+
+
         }
 
         // calculate reflection

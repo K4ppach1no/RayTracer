@@ -20,8 +20,11 @@ public class Camera {
         BottomLeft = Center.sub(up).sub(right);
     }
 
+    // this method returns a ray from the camera to the given pixel
     public Ray getRay(float u, float v) {
+        // calculate the direction
         Vec3 direction = TopLeft.add(TopRight.sub(TopLeft).mul(u)).add(BottomLeft.sub(TopLeft).mul(v)).sub(position);
+        // return the ray
         return new Ray(position, direction, Float.MAX_VALUE);
     }
 }
