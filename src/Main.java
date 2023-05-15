@@ -43,20 +43,6 @@ public class Main {
                 0.0f // transparency
         ));
 
-        // load an obj file using the loadObj method
-        /*
-         * try {
-         * scene.loadObj(
-         * scene,
-         * "plant.obj",
-         * new Color(200, 200, 200),
-         * 0f,
-         * 0f);
-         * } catch (IOException e) {
-         * e.printStackTrace();
-         * }
-         */
-
         // Create a light
         scene.addLight(new Light(
                 new Vec3(1, 0, 0), // position
