@@ -1,6 +1,8 @@
 package classes;
 
 import java.awt.image.BufferedImage;
+import java.lang.Math;
+import java.util.Random;
 
 public class Renderer {
     // EPSILON is used to prevent self-intersection, also known as acne
@@ -73,6 +75,7 @@ public class Renderer {
         // add the refraction color to the color
         color = color.add(refractionColor.mul(intersection.material.getTransparency()));
 
+
         // return the color
         return color;
     }
@@ -80,14 +83,26 @@ public class Renderer {
     public static void render(Scene scene, BufferedImage img) {
         int width = img.getWidth();
         int height = img.getHeight();
+        int sample = 100;
+
+
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                float u = (float) x / width;
-                float v = (float) y / height;
-                Ray ray = scene.camera.getRay(u, v);
-                Color color = trace(ray, scene, 5);
-                img.setRGB(x, y, color.toInt());
+                Color cumColor = new Color(0,0,0);
+
+                for (int s = 0; s < sample; s++) {
+
+                    float u = (float) (x + Math.random()) / width;
+                    float v = (float) (y + Math.random()) / height;
+
+                    Ray ray = scene.camera.getRay(u, v);
+                    Color color = trace(ray, scene, 5);
+                    cumColor = cumColor.add(color);
+                }
+
+                Color avgColor = cumColor.sample(cumColor, sample);
+                img.setRGB(x, y, avgColor.toInt());
             }
         }
     }

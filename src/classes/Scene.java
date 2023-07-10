@@ -65,7 +65,6 @@ public class Scene {
         for (var material : materials) {
             // Get the intersection
             Intersection intersection = material.intersect(ray);
-
             // If there is an intersection
             if (intersection != null) {
                 // If closestIntersection is null or the intersection is closer than

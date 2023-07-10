@@ -13,7 +13,7 @@ public class Color {
 
     // add two colors
     public Color add(Color c) {
-        return new Color(r + c.r, g + c.g, b + c.b);
+        return new Color((int) (r + c.r), (int) (g + c.g), (int) (b + c.b));
     }
 
     // multiply two colors
@@ -28,12 +28,17 @@ public class Color {
 
     // scale a color 
     public Color scale(float scale) {
+        System.out.println(r * scale);
         return new Color((int) (r * scale), (int) (g * scale), (int) (b * scale));
     }
 
     // scale a color with another color
     public Color scale (Color color) {
         return new Color((int) (r * color.r / 255f), (int) (g * color.g / 255f), (int) (b * color.b / 255f));
+    }
+
+    public Color sample (Color color, int sample){
+        return new Color((int) (color.r / sample), (color.g / sample), (color.b / sample));
     }
 
     // convert a color to an integer
