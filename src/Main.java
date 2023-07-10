@@ -59,8 +59,27 @@ public class Main {
 
         try {
             ImageIO.write(img, "png", image);
+            
+            String os = System.getProperty("os.name").toLowerCase();
+            String command;
+            
             // open the image
-            Runtime.getRuntime().exec("cmd /c start " + image.getAbsolutePath());
+            if (os.contains("win"))
+            {
+            	// Windows command
+            	command = "cmd /c start " + image.getAbsolutePath();
+            }
+            else if (os.contains("mac"))
+            {
+            	// MacOS command
+            	command = "open " + image.getAbsolutePath();
+            }
+            else 
+            {
+            	throw new UnsupportedOperationException("Unsupported OS: " + os);
+            }
+            
+            Runtime.getRuntime().exec(command);
         } catch (IOException e) {
             e.printStackTrace();
         }
