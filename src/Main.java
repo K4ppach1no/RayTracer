@@ -15,6 +15,15 @@ public class Main {
 
         // Create a scene
         Scene scene = new Scene();
+        
+        // Create a plane
+        scene.addMaterial(new Plane(
+        		new Vec3(0, 1, 1),
+        		3f,
+        		new Color(255, 255, 255),
+        		0.5f,
+        		0f
+        ));
 
         // Create a sphere
         scene.addMaterial(new Sphere(
