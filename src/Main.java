@@ -15,6 +15,15 @@ public class Main {
 
         // Create a scene
         Scene scene = new Scene();
+        
+        // Create a plane
+        scene.addMaterial(new Plane(
+        		new Vec3(0, 1, 1),
+        		3f,
+        		new Color(255, 255, 255),
+        		0.5f,
+        		0f
+        ));
 
         // Create a sphere
         scene.addMaterial(new Sphere(
@@ -59,8 +68,27 @@ public class Main {
 
         try {
             ImageIO.write(img, "png", image);
+            
+            String os = System.getProperty("os.name").toLowerCase();
+            String command;
+            
             // open the image
-            Runtime.getRuntime().exec("cmd /c start " + image.getAbsolutePath());
+            if (os.contains("win"))
+            {
+            	// Windows command
+            	command = "cmd /c start " + image.getAbsolutePath();
+            }
+            else if (os.contains("mac"))
+            {
+            	// MacOS command
+            	command = "open " + image.getAbsolutePath();
+            }
+            else 
+            {
+            	throw new UnsupportedOperationException("Unsupported OS: " + os);
+            }
+            
+            Runtime.getRuntime().exec(command);
         } catch (IOException e) {
             e.printStackTrace();
         }
