@@ -107,7 +107,7 @@ public class Renderer {
         int width = img.getWidth();
         int height = img.getHeight();
         int sample = 100;
-        int numThreads = Runtime.getRuntime().availableProcessors(); // Get the number of available cores
+        int numThreads = 4;//Runtime.getRuntime().availableProcessors(); // Get the number of available cores
 
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
         Future<?>[] futures = new Future[width];
@@ -135,7 +135,7 @@ public class Renderer {
                     }
                     progressLatch.countDown();
                     double progress = 100.0 - (double) progressLatch.getCount() / width * 100;
-                    System.out.println("Rendering progress: " + progress + "%");
+                    System.out.println("Rendering progress: " + Math.round(progress) + "%");
                 }
             });
         }

@@ -2,9 +2,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import classes.*;
 import shapes.*;
@@ -13,8 +10,8 @@ public class Main {
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
 
-        int width = 1000;
-        int height = 1000;
+        int width = 1024;
+        int height = 1024;
 
         // Create a scene
         Scene scene = new Scene();
