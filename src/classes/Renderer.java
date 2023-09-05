@@ -1,13 +1,27 @@
 package classes;
 
 import java.awt.image.BufferedImage;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.lang.Math;
-import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 
 public class Renderer {
     // EPSILON is used to prevent self-intersection, also known as acne
     public static final float EPSILON = 0.0001f;
 
+    /**
+     * Traces a ray through the scene and calculates the color at the intersection
+     * point.
+     *
+     * @param ray            The ray to trace.
+     * @param scene          The scene through which to trace the ray.
+     * @param recursionDepth The maximum number of recursive calls, controlling the
+     *                       number of reflections and refractions.
+     * @return The color at the intersection point.
+     */
     public static Color trace(Ray ray, Scene scene, int recursionDepth) {
         // if the recursion depth is 0, return black
         if (recursionDepth == 0) {
@@ -64,46 +78,82 @@ public class Renderer {
         Color color = intersection.material.getColor().mul(intensity);
 
         // calculate the reflection color
-        Color reflectionColor = trace(new Ray(intersection.position.add(reflection.scale(EPSILON)), reflection, Float.MAX_VALUE), scene, recursionDepth - 1);
+        Color reflectionColor = trace(
+                new Ray(intersection.position.add(reflection.scale(EPSILON)), reflection, Float.MAX_VALUE), scene,
+                recursionDepth - 1);
 
         // add the reflection color to the color
         color = color.add(reflectionColor.mul(intersection.material.getReflectivity()));
 
         // calculate the refraction color
-        Color refractionColor = trace(new Ray(intersection.position.add(reflection.scale(EPSILON)), reflection, Float.MAX_VALUE), scene, recursionDepth - 1);
+        Color refractionColor = trace(
+                new Ray(intersection.position.add(reflection.scale(EPSILON)), reflection, Float.MAX_VALUE), scene,
+                recursionDepth - 1);
 
         // add the refraction color to the color
         color = color.add(refractionColor.mul(intersection.material.getTransparency()));
-
 
         // return the color
         return color;
     }
 
+    /**
+     * Renders the entire scene into a BufferedImage.
+     *
+     * @param scene The scene to render.
+     * @param img   The image into which to render the scene.
+     */
     public static void render(Scene scene, BufferedImage img) {
         int width = img.getWidth();
         int height = img.getHeight();
         int sample = 100;
+        int numThreads = Runtime.getRuntime().availableProcessors(); // Get the number of available cores
 
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+        Future<?>[] futures = new Future[width];
+        CountDownLatch progressLatch = new CountDownLatch(width);
 
+        // Number of vertical lines each thread will render at a time
+        int linesPerThread = width / numThreads;
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                Color cumColor = new Color(0,0,0);
-
-                for (int s = 0; s < sample; s++) {
-
-                    float u = (float) (x + Math.random()) / width;
-                    float v = (float) (y + Math.random()) / height;
-
-                    Ray ray = scene.camera.getRay(u, v);
-                    Color color = trace(ray, scene, 5);
-                    cumColor = cumColor.add(color);
+        for (int x = 0; x < width; x += linesPerThread) {
+            final int startX = x;
+            final int endX = Math.min(x + linesPerThread, width);
+            futures[x] = executor.submit(() -> {
+                for (int lineX = startX; lineX < endX; lineX++) {
+                    for (int y = 0; y < height; y++) {
+                        Color cumColor = new Color(0, 0, 0);
+                        for (int s = 0; s < sample; s++) {
+                            float u = (float) (lineX + Math.random()) / width;
+                            float v = (float) (y + Math.random()) / height;
+                            Ray ray = scene.camera.getRay(u, v);
+                            Color color = trace(ray, scene, 5);
+                            cumColor = cumColor.add(color);
+                        }
+                        Color avgColor = cumColor.sample(cumColor, sample);
+                        img.setRGB(lineX, y, avgColor.toInt());
+                    }
+                    progressLatch.countDown();
+                    double progress = 100.0 - (double) progressLatch.getCount() / width * 100;
+                    System.out.println("Rendering progress: " + progress + "%");
                 }
+            });
+        }
 
-                Color avgColor = cumColor.sample(cumColor, sample);
-                img.setRGB(x, y, avgColor.toInt());
+        // Wait for all tasks to complete
+        try {
+            for (int x = 0; x < width; x += linesPerThread) {
+                futures[x].get();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        executor.shutdown();
+        try {
+            executor.awaitTermination(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
