@@ -15,7 +15,7 @@ public class Plane extends Material {
         this.distance = distance;
         this.color = color;
         this.reflectivity = reflectivity;
-        
+        this.transparency = transparency;
     }
 
     @Override

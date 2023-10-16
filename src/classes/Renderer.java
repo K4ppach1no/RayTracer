@@ -10,7 +10,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class Renderer {
     // EPSILON is used to prevent self-intersection, also known as acne
-    public static final float EPSILON = 0.0001f;
+    public static final float EPSILON = 0.00000001f;
 
     /**
      * Traces a ray through the scene and calculates the color at the intersection
@@ -33,7 +33,11 @@ public class Renderer {
 
         // if there is no intersection, return black
         if (intersection == null) {
-            return new Color(0, 0, 0);
+        	if (scene.skybox != null) {
+        		return scene.skybox.calculateColor(ray.direction);
+        	} else {
+        		return new Color(0, 0, 0);
+        	}
         }
 
         // calculate normal

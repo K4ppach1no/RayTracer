@@ -14,17 +14,20 @@ public class Scene {
     public Camera camera;
     public Light[] lights;
     public Material[] materials;
+    public Skybox skybox;
 
-    public Scene(Camera camera, Light[] lights, Material[] materials) {
+    public Scene(Camera camera, Light[] lights, Material[] materials, Skybox skybox) {
         this.camera = camera;
         this.lights = lights;
         this.materials = materials;
+        this.skybox = skybox;
     }
 
     public Scene() {
-        this.camera = new Camera(new Vec3(0, 0, 0), new Vec3(0, 0, -1), 60);
+        this.camera = new Camera(new Vec3(0, 0, 0), new Vec3(0, 0, -1), 80.0f);
         this.lights = new Light[0];
         this.materials = new Material[0];
+        this.skybox = new Skybox(new Color(227, 235, 254));
     }
 
     // add light to the scene
