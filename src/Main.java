@@ -84,24 +84,24 @@ public class Main {
 
                 long startTime = System.currentTimeMillis();
                 
-                int width = 1024;
-                int height = 1024;
+                int width = 300;
+                int height = 300;
 
                 // Create a scene
                 Scene scene = new Scene();
                 
                 // Create a ground plane
                 scene.addMaterial(new Sphere(
-                    new Vec3(0, -100.5f, -8.5f),   // position
+                    new Vec3(0, -100.5f, 0),   // position
                     100,               // radius
                     new Color(140, 157, 183), // color
-                    0.25f,                // reflectivity
+                    0.5f,                // reflectivity
                     0f                 // transparency
                 ));
                 
                 // Create a sphere
                 scene.addMaterial(new Sphere(
-                        new Vec3(-1, 0, -2), // position
+                        new Vec3(-0.5f, 0f, -2), // position
                         0.45f, // radius
                         new Color(255, 0, 0), // color
                         0f, // reflectivity
@@ -110,7 +110,7 @@ public class Main {
 
                 // Create a sphere
                 scene.addMaterial(new Sphere(
-                        new Vec3(0, 0, -2), // position
+                        new Vec3(0.5f, 0f, -2), // position
                         0.45f, // radius
                         new Color(0, 0, 255), // color
                         0f, // reflectivity
@@ -119,8 +119,8 @@ public class Main {
 
                 // Create a sphere behind the other two
                 scene.addMaterial(new Sphere(
-                        new Vec3(1, 0, -2), // position
-                        0.45f, // radius
+                        new Vec3(0, 0f, -3), // position
+                        0.5f, // radius
                         new Color(0, 255, 0), // color
                         0f, // reflectivity
                         0.0f // transparency
@@ -128,7 +128,7 @@ public class Main {
                 
                 // Create a light
                 scene.addLight(new Light(
-                        new Vec3(x, 0, z), // position
+                        new Vec3(x, 0.5f, z), // position
                         new Color(1, 1, 1), // color
                         2, // intensity
                         new Vec3(0, 0, 0) // direction

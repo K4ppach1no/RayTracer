@@ -24,7 +24,7 @@ public class Scene {
     }
 
     public Scene() {
-        this.camera = new Camera(new Vec3(0, 0, 0), new Vec3(0, 0, -1), 80.0f);
+        this.camera = new Camera(new Vec3(0, 0.5f, 0), new Vec3(0, -0.25f, -1), 60.0f);
         this.lights = new Light[0];
         this.materials = new Material[0];
         this.skybox = new Skybox(new Color(227, 235, 254));
